@@ -1,20 +1,5 @@
 # Vietnamese FDI Stock Volatility Prediction
 
-**Topic**: Predicting the Volatility and Risk Level of Stock Prices of FDI Enterprises Listed in Vietnam
-
-## Quick Start
-
-```bash
-# 1. Install dependencies
-pip install -r requirements.txt
-
-# 2. Collect data
-python collect_data.py
-
-# 3. Run notebooks
-jupyter notebook notebooks/
-```
-
 ## Project Structure
 
 ```
@@ -24,10 +9,12 @@ NCKH/
 ├── collect_data.py          # Data collection entry point
 │
 ├── data/
-│   ├── values.csv           # Stock price & features (75,754 rows × 9 cols)
-│   ├── adj.npy              # Adjacency matrix (98×98)
-│   ├── fdi_stocks_list.csv  # List of FDI stocks
-│   └── analysis/            # Generated analysis outputs
+│   ├── raw/                        # Raw inputs for datasets
+│   │   ├── values.csv              # Stock price & features (75,754 rows × 9 cols)
+│   │   ├── adj.npy                 # Adjacency matrix (98×98)
+│   │   └── fdi_stocks_list.csv     # List of FDI stocks
+│   ├── processed/                  # Cached PyTorch Geometric artifacts
+│   └── analysis/                   # Generated analysis outputs
 │
 ├── notebooks/
 │   ├── 0_data_collection.ipynb      # Data collection demo
@@ -59,18 +46,22 @@ NCKH/
 - **98 Vietnamese FDI stocks** (2022-01-01 to 2024-12-31)
 - **773 trading days** of historical data
 - **9 features** per stock:
+- Raw files stored in `data/raw/values.csv` and `data/raw/adj.npy`
+
 
 | Feature | Description | Formula |
 |---------|-------------|---------|
 | Close | Closing price | Raw price |
 | NormClose | Normalized close | Close / First Close |
 | DailyLogReturn | Daily log return | log(Close_t / Close_{t-1}) |
+
 | ALR1W | 1-week annualized return | (Close_t / Close_{t-5})^(252/5) - 1 |
 | ALR2W | 2-week annualized return | (Close_t / Close_{t-10})^(252/10) - 1 |
 | ALR1M | 1-month annualized return | (Close_t / Close_{t-21})^(252/21) - 1 |
 | ALR2M | 2-month annualized return | (Close_t / Close_{t-42})^(252/42) - 1 |
 | RSI | Relative Strength Index | Technical momentum indicator |
 | MACD | Moving Average Convergence Divergence | Trend-following indicator |
+
 
 ### Graph Structure
 - **Adjacency matrix**: 98×98 correlation-based graph
@@ -80,6 +71,7 @@ NCKH/
 
 ## Models
 
+
 | Group | Algorithm | Role | Implementation |
 |-------|-----------|------|----------------|
 | **Baseline** | ARIMA | Statistical benchmark | `src/models/arima.py` |
@@ -87,11 +79,13 @@ NCKH/
 | **DL** | LSTM | Temporal modeling | `src/models/lstm.py` |
 | **(Optional)** | GRU | Lighter than LSTM | `src/models/gru.py` |
 
+
 ### Model Details
 
 #### ARIMA (AutoRegressive Integrated Moving Average)
 - Classical statistical model for time series
 - Separate model for each stock
+
 - Order: (p=2, d=1, q=1)
 - **Pros**: Interpretable, no training required
 - **Cons**: Cannot capture non-linear relationships

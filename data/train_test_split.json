@@ -1,0 +1,7 @@
+{
+  "train_size": 578,
+  "test_size": 145,
+  "train_ratio": 0.8,
+  "past_window": 25,
+  "future_window": 1
+}

@@ -159,7 +159,7 @@ class VNStocksDataset(Dataset):
     
     def get(self, idx: int) -> Data:
         """Get a single temporal snapshot."""
-        data = torch.load(osp.join(self.processed_dir, f'timestep_{idx}.pt'))
+        data = torch.load(osp.join(self.processed_dir, f'timestep_{idx}.pt'), weights_only=False)
         return data
 
 

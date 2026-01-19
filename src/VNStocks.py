@@ -11,7 +11,7 @@ import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from utils import (
+from data_utils import (
     download_stock_data,
     get_trading_days,
     create_adjacency_matrix,
