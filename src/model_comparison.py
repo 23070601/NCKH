@@ -375,6 +375,32 @@ class TemporalGCNVolatilityModel:
 # HELPER FUNCTIONS
 # ============================================================================
 
+def create_lag_features(data, lags=[1, 5, 10, 20]):
+    """
+    Create lag features for ML models
+    
+    Args:
+        data: Time series data
+        lags: List of lag values to create
+    
+    Returns:
+        DataFrame with lag and rolling statistics features
+    """
+    df = pd.DataFrame()
+    df['target'] = data
+    
+    for lag in lags:
+        df[f'lag_{lag}'] = pd.Series(data).shift(lag)
+    
+    # Rolling statistics
+    df['rolling_mean_5'] = pd.Series(data).rolling(5).mean()
+    df['rolling_std_5'] = pd.Series(data).rolling(5).std()
+    df['rolling_mean_10'] = pd.Series(data).rolling(10).mean()
+    df['rolling_std_10'] = pd.Series(data).rolling(10).std()
+    
+    return df.dropna()
+
+
 def create_sequences(data, lookback):
     """
     Create sequences for RNN models
