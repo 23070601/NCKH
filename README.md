@@ -2,24 +2,35 @@
 
 ## Research Project: Predicting Volatility and Risk Level of Stock Prices for FDI Enterprises in Vietnam
 
-This repository contains code and data for analyzing Vietnamese FDI (Foreign Direct Investment) companies using Graph Neural Networks (GNNs).
+This repository contains code and data for analyzing Vietnamese FDI (Foreign Direct Investment) companies using **Multi-Algorithm Comparison** with Deep Learning, Machine Learning, and Baseline models.
+
+> 📌 **ALGORITHM COMPARISON FRAMEWORK** 🆕: See [docs/ALGORITHM_COMPARISON_GUIDE.md](docs/ALGORITHM_COMPARISON_GUIDE.md) for the new testing strategy comparing Baseline (Historical Mean/ARIMA), ML (Random Forest), and DL (LSTM/GRU) models to find the optimal algorithm for your research!
 
 ## Project Structure
 
 ```
-code/
-├── notebooks/
-│   └── 1_data_preparation.ipynb    # Data preparation and feature engineering
-├── src/
-│   ├── VNStocks.py                 # Stock data collection pipeline
-│   └── utils.py                    # Utility functions
-├── data/
-│   ├── fdi_stocks_list.csv        # List of FDI companies to analyze
-│   ├── stocks.csv                 # Stock metadata (generated)
-│   ├── fundamentals.csv           # Fundamental features (generated)
-│   ├── values.csv                 # Daily closing prices (generated)
-│   └── adj.npy                    # Adjacency matrix for GNN (generated)
-└── README.md
+NCKH/
+├── README.md                       # Project overview
+├── requirements.txt                # Python dependencies
+├── .gitignore                      # Git ignore rules
+├── data/                           # Data files
+│   └── fdi_stocks_list.csv        # 100 FDI stocks from HOSE & HNX
+├── notebooks/                      # Jupyter notebooks (analysis pipeline)
+│   ├── 0_data_collection.ipynb
+│   ├── 1_data_preparation.ipynb
+│   └── 2_model_comparison.ipynb
+├── src/                            # Source code modules
+│   ├── VNStocks.py                # Data collection and preprocessing
+│   ├── utils.py                   # Helper functions
+│   └── model_comparison.py        # Algorithm implementations
+├── docs/                           # Documentation
+│   ├── START_HERE.txt
+│   ├── ALGORITHM_COMPARISON_GUIDE.md
+│   ├── ALGORITHM_FRAMEWORK_COMPLETE.txt
+│   ├── COMPLETION_GUIDE.md
+│   └── PROJECT_SUMMARY.md
+└── scripts/                        # Utility scripts
+    └── QUICKSTART.py              # Quick setup script
 ```
 
 ## Setup
