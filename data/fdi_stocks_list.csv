@@ -1,0 +1,99 @@
+ticker,name,sector,exchange,fdi_status,market_cap
+VNM,Vietnam Dairy Products Joint Stock Company,Consumer Staples,HOSE,High,Large
+SAB,Sabeco - Vietnam Brewery,Consumer Staples,HOSE,High,Large
+MSN,Masan Group Corporation,Consumer Staples,HOSE,Medium,Large
+VIC,Vingroup Joint Stock Company,Real Estate,HOSE,Medium,Large
+VHM,Vinhomes Joint Stock Company,Real Estate,HOSE,Medium,Large
+HPG,Hoa Phat Group JSC,Materials,HOSE,Low,Large
+VCB,Vietcombank,Financials,HOSE,Low,Large
+BID,Bank for Investment and Development of Vietnam,Financials,HOSE,Low,Large
+CTG,Vietnam Joint Stock Commercial Bank for Industry and Trade,Financials,HOSE,Low,Large
+GAS,PetroVietnam Gas Joint Stock Corporation,Energy,HOSE,Low,Large
+POW,PetroVietnam Power Corporation,Utilities,HOSE,Low,Large
+VRE,Vincom Retail Joint Stock Company,Real Estate,HOSE,Medium,Large
+MWG,Mobile World Investment Corporation,Consumer Discretionary,HOSE,Medium,Large
+PLX,Petrolimex,Energy,HOSE,Low,Medium
+TCB,Vietnam Technological and Commercial Joint Stock Bank,Financials,HOSE,Low,Large
+FPT,FPT Corporation,Information Technology,HOSE,Medium,Large
+VPB,Vietnam Prosperity Joint Stock Commercial Bank,Financials,HOSE,Medium,Large
+SSI,Saigon Securities Incorporation,Financials,HOSE,Medium,Medium
+MBB,Military Commercial Joint Stock Bank,Financials,HOSE,Low,Large
+VJC,Vietjet Aviation Joint Stock Company,Industrials,HOSE,High,Large
+HVN,Vietnam Airlines Corporation,Industrials,HOSE,Low,Large
+NVL,Novaland Group,Real Estate,HOSE,Medium,Large
+PDR,Phat Dat Real Estate Development Corporation,Real Estate,HOSE,Medium,Medium
+KDH,Khang Dien House Trading and Investment JSC,Real Estate,HOSE,Medium,Medium
+DIG,DIC Corp,Real Estate,HOSE,Medium,Medium
+BCM,Investment and Industrial Development Corporation,Industrials,HOSE,Low,Medium
+GVR,Cao Su Group - Vietnam Rubber Group,Materials,HOSE,Low,Large
+DPM,PetroVietnam Fertilizer and Chemicals Corporation,Materials,HOSE,Low,Large
+DCM,DCM - Chua Cai Fertilizer JSC,Materials,Materials,Low,Medium
+DHG,Hau Giang Pharmaceutical JSC,Health Care,HOSE,Medium,Medium
+DMC,Domesco Medical Import Export JSC,Health Care,HOSE,Low,Small
+IMP,Imexpharm Pharmaceutical JSC,Health Care,HOSE,Low,Small
+DHT,DHT Finance Corporation,Financials,HOSE,Low,Small
+VPI,Vietnam Petroleum Transport JSC,Energy,HOSE,Low,Medium
+PVT,PetroVietnam Transportation Corporation,Energy,HOSE,Low,Medium
+PVD,PetroVietnam Drilling and Well Services Corporation,Energy,HOSE,Low,Medium
+PVS,PetroVietnam Technical Services Corporation,Energy,HOSE,Low,Small
+BSR,Binh Son Refining and Petrochemical Company,Energy,HOSE,Low,Large
+PGV,Petrovietnam Gas Corporation,Utilities,HOSE,Low,Large
+NT2,Nhon Trach 2 Power JSC,Utilities,HOSE,Low,Medium
+PC1,Power Construction JSC No 1,Utilities,HOSE,Low,Small
+REE,Refrigeration Electrical Engineering Corporation,Industrials,HOSE,Medium,Large
+GMD,Gemadept Corporation,Industrials,HOSE,Medium,Medium
+HAH,Hai An Transport and Stevedoring JSC,Industrials,HOSE,Low,Small
+VSC,Vietnam Container Shipping JSC,Industrials,HOSE,Low,Medium
+HT1,Vinaconex Investment Development Construction JSC,Industrials,HOSE,Low,Small
+VGC,Viglacera Corporation,Materials,HOSE,Low,Medium
+HT1,Hateco Hightech Construction JSC,Industrials,HOSE,Low,Small
+HSG,Hoa Sen Group,Materials,HOSE,Medium,Large
+NKG,Steel National Group JSC,Materials,HOSE,Low,Medium
+TLG,Tung Lam Group,Materials,HOSE,Low,Small
+DTL,Da Thanh Technology and Telecom Services JSC,Information Technology,HOSE,Low,Small
+CMG,CMC Corporation,Information Technology,HOSE,Medium,Medium
+VGI,Vietnam Gas Corporation,Utilities,HOSE,Low,Medium
+STB,Saigon Thuong Tin Commercial Joint Stock Bank,Financials,HOSE,Medium,Large
+HDB,Ho Chi Minh City Development Joint Stock Commercial Bank,Financials,HOSE,Medium,Large
+TPB,Tien Phong Commercial Joint Stock Bank,Financials,HOSE,Medium,Large
+ACB,Asia Commercial Joint Stock Bank,Financials,HOSE,Medium,Large
+SHB,Saigon Hanoi Commercial Joint Stock Bank,Financials,HOSE,Low,Large
+EIB,Vietnam Export Import Commercial Joint Stock Bank,Financials,HOSE,Low,Medium
+VIB,Vietnam International Commercial Joint Stock Bank,Financials,HOSE,Medium,Medium
+LPB,Lien Viet Post Joint Stock Commercial Bank,Financials,HOSE,Low,Medium
+MSB,Vietnam Maritime Commercial Joint Stock Bank,Financials,HOSE,Low,Medium
+OCB,Orient Commercial Joint Stock Bank,Financials,HOSE,Low,Medium
+VND,Viet Nam Dairy JSC,Consumer Staples,HOSE,Medium,Medium
+MCH,Masan Consumer Holdings,Consumer Staples,HOSE,Medium,Large
+VHC,Vinh Hoan Corporation,Consumer Staples,HOSE,Medium,Medium
+ANV,Nam Viet Corporation,Consumer Staples,HOSE,Low,Small
+DBC,Dabaco Group,Consumer Staples,HOSE,Low,Medium
+BAF,BAFACO Pharmaceutical JSC,Health Care,HOSE,Low,Small
+TRA,Traphaco Joint Stock Company,Health Care,HOSE,Medium,Medium
+DVP,Dat Viet Pharmaceutical JSC,Health Care,HOSE,Low,Small
+PME,Petrovietnam Mechanical - Electrical JSC,Energy,HOSE,Low,Small
+PVG,Petrovietnam Gas Finance Corporation,Energy,HOSE,Low,Medium
+PAN,Pan Group JSC,Real Estate,HOSE,Medium,Medium
+PDN,Phuoc Dong Nai Rubber JSC,Materials,HOSE,Low,Small
+PHR,Phu Nhuan Jewelry JSC,Consumer Discretionary,HOSE,Medium,Medium
+PNJ,Phu Nhuan Jewelry Joint Stock Company,Consumer Discretionary,HOSE,High,Large
+DGW,Digiworld Corporation,Consumer Discretionary,HOSE,Medium,Medium
+FRT,FPT Retail Joint Stock Company,Consumer Discretionary,HOSE,Medium,Medium
+MML,Masan Meatlife Corporation,Consumer Staples,HOSE,Medium,Medium
+ASM,Sao Mai Group Corporation,Industrials,HOSE,Low,Small
+CSV,Coteccons Construction JSC,Industrials,HOSE,Medium,Medium
+HBC,Hoa Binh Construction Group JSC,Industrials,HOSE,Medium,Medium
+CTD,Coteccons Construction JSC,Industrials,HOSE,Medium,Medium
+HCM,Ho Chi Minh City Securities Corporation,Financials,HOSE,Medium,Medium
+VND,VNDIRECT Securities Corporation,Financials,HOSE,Medium,Large
+VCI,Vietnam Capital Securities JSC,Financials,HOSE,Medium,Medium
+SHS,Saigon Hanoi Securities JSC,Financials,HOSE,Medium,Medium
+AGG,An Giang Agricultural Products JSC,Consumer Staples,HOSE,Low,Small
+SBT,Ben Thanh Trading Services JSC,Consumer Staples,HOSE,Low,Small
+KDC,Kinh Do Corporation,Consumer Staples,HOSE,High,Medium
+QNS,Quang Ngai Sugar JSC,Consumer Staples,HOSE,Low,Small
+BBC,BIEN HOA Packaging JSC,Materials,HOSE,Low,Small
+BMP,Binh Minh Plastic JSC,Materials,HOSE,Medium,Medium
+AAA,An Phat Plastic and Green Environment JSC,Materials,HOSE,Medium,Medium
+NTP,Nam Tan Uyen Plastic JSC,Materials,HOSE,Low,Small
+TNG,TNG Investment and Trading JSC,Consumer Discretionary,HOSE,Low,Small
