@@ -243,7 +243,7 @@ def get_fundamental_features(ticker: str, use_api: bool = False) -> Dict:
     if use_api:
         try:
             # Try vnstock3 for Vietnamese stocks
-            from vnstock3 import Vnstock
+            from vnstock3 import Vnstock  # type: ignore
             stock = Vnstock().stock(symbol=ticker, source='VCI')
             
             # Get financial ratios
