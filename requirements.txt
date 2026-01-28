@@ -18,6 +18,7 @@ plotly>=5.13.0
 
 # Vietnamese stock data (optional)
 vnstock>=0.2.0
+vnstock3>=0.1.0  # Enhanced API for fundamentals
 
 # Jupyter
 jupyter>=1.0.0
