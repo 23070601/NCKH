@@ -222,29 +222,134 @@ def load_stock_list(filepath: str) -> pd.DataFrame:
     return pd.read_csv(filepath)
 
 
-def get_fundamental_features(ticker: str) -> Dict:
+def get_fundamental_features(ticker: str, use_api: bool = False) -> Dict:
     """
-    Get fundamental features for a stock
+    Get fundamental features for a stock.
+    
+    Enhanced to include comprehensive financial metrics:
+    - Valuation ratios (P/E, P/B, P/S)
+    - Profitability (ROE, ROA, Profit Margin)
+    - Leverage (Debt/Equity, Current Ratio)
+    - Growth (Revenue Growth, EPS Growth)
+    - Market metrics (Market Cap, Beta, Liquidity)
     
     Args:
         ticker: Stock ticker
+        use_api: Whether to use real API (vnstock, vndirect)
     
     Returns:
         Dictionary of fundamental features
     """
-    # Placeholder - in practice, fetch from financial data API
+    if use_api:
+        try:
+            # Try vnstock3 for Vietnamese stocks
+            from vnstock3 import Vnstock
+            stock = Vnstock().stock(symbol=ticker, source='VCI')
+            
+            # Get financial ratios
+            ratios = stock.finance.ratio(period='quarter', lang='en')
+            
+            if ratios is not None and not ratios.empty:
+                latest = ratios.iloc[0]
+                return {
+                    'ticker': ticker,
+                    # Valuation
+                    'pe_ratio': latest.get('PE', np.nan),
+                    'pb_ratio': latest.get('PB', np.nan),
+                    'ps_ratio': latest.get('PS', np.nan),
+                    'peg_ratio': latest.get('PEG', np.nan),
+                    # Profitability
+                    'roe': latest.get('ROE', np.nan) / 100 if 'ROE' in latest else np.nan,
+                    'roa': latest.get('ROA', np.nan) / 100 if 'ROA' in latest else np.nan,
+                    'profit_margin': latest.get('profitMargin', np.nan),
+                    'operating_margin': latest.get('operatingMargin', np.nan),
+                    # Leverage
+                    'debt_to_equity': latest.get('debtToEquity', np.nan),
+                    'debt_to_assets': latest.get('debtToAssets', np.nan),
+                    'current_ratio': latest.get('currentRatio', np.nan),
+                    'quick_ratio': latest.get('quickRatio', np.nan),
+                    # Growth
+                    'revenue_growth': latest.get('revenueGrowth', np.nan),
+                    'eps_growth': latest.get('epsGrowth', np.nan),
+                    # Market
+                    'market_cap': latest.get('marketCap', np.nan),
+                    'beta': latest.get('beta', np.nan),
+                    'dividend_yield': latest.get('dividendYield', np.nan),
+                    'avg_volume': latest.get('avgVolume', np.nan),
+                }
+        except ImportError:
+            print(f"vnstock3 not available, using simulated data for {ticker}")
+        except Exception as e:
+            print(f"Error fetching real data for {ticker}: {e}")
+    
+    # Fallback: Generate realistic simulated data
     np.random.seed(hash(ticker) % 2**32)
+    
+    # Simulate sector-based characteristics
+    sector_pe = np.random.choice([12, 15, 20, 25], p=[0.25, 0.35, 0.25, 0.15])
     
     return {
         'ticker': ticker,
-        'pe_ratio': np.random.uniform(5, 30),
-        'pb_ratio': np.random.uniform(0.5, 5),
-        'roe': np.random.uniform(0.05, 0.30),
-        'debt_to_equity': np.random.uniform(0.1, 2.0),
-        'dividend_yield': np.random.uniform(0, 0.08),
-        'market_cap': np.random.uniform(1e9, 1e11),
-        'beta': np.random.uniform(0.5, 2.0),
+        # Valuation ratios
+        'pe_ratio': max(0, np.random.normal(sector_pe, 5)),
+        'pb_ratio': max(0.1, np.random.lognormal(0.5, 0.7)),
+        'ps_ratio': max(0.1, np.random.lognormal(0.3, 0.6)),
+        'peg_ratio': max(0, np.random.normal(1.5, 0.8)),
+        # Profitability (as decimals)
+        'roe': np.clip(np.random.normal(0.15, 0.08), -0.5, 0.5),
+        'roa': np.clip(np.random.normal(0.08, 0.05), -0.3, 0.3),
+        'profit_margin': np.clip(np.random.normal(0.10, 0.08), -0.2, 0.5),
+        'operating_margin': np.clip(np.random.normal(0.12, 0.08), -0.2, 0.5),
+        # Leverage
+        'debt_to_equity': max(0, np.random.lognormal(0, 0.8)),
+        'debt_to_assets': np.clip(np.random.beta(2, 5), 0, 1),
+        'current_ratio': max(0.5, np.random.normal(1.5, 0.5)),
+        'quick_ratio': max(0.3, np.random.normal(1.0, 0.4)),
+        # Growth (as decimals)
+        'revenue_growth': np.random.normal(0.10, 0.15),
+        'eps_growth': np.random.normal(0.08, 0.20),
+        # Market metrics
+        'market_cap': np.random.lognormal(23, 2),  # Wide range
+        'beta': np.clip(np.random.normal(1.0, 0.4), 0.2, 2.5),
+        'dividend_yield': max(0, np.random.beta(2, 10) * 0.1),
+        'avg_volume': np.random.lognormal(13, 1.5),  # Trading volume
     }
+
+
+def collect_fundamentals_for_tickers(
+    tickers: List[str],
+    use_api: bool = False,
+    save_path: Optional[str] = None
+) -> pd.DataFrame:
+    """
+    Collect fundamental features for multiple tickers.
+    
+    Args:
+        tickers: List of stock tickers
+        use_api: Whether to use real API
+        save_path: Optional path to save CSV
+        
+    Returns:
+        DataFrame with fundamental features
+    """
+    fundamentals = []
+    
+    print(f"Collecting fundamentals for {len(tickers)} stocks...")
+    
+    for i, ticker in enumerate(tickers, 1):
+        features = get_fundamental_features(ticker, use_api=use_api)
+        fundamentals.append(features)
+        
+        if i % 10 == 0 or i == len(tickers):
+            print(f"  Progress: {i}/{len(tickers)}")
+    
+    df = pd.DataFrame(fundamentals)
+    
+    if save_path:
+        df.to_csv(save_path, index=False)
+        print(f"\n✓ Saved fundamentals to {save_path}")
+    
+    return df
 
 
 def validate_data(df: pd.DataFrame, required_columns: List[str]) -> bool:
