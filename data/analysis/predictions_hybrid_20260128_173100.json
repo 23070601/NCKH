@@ -1,0 +1,18 @@
+{
+  "symbol": "FPT",
+  "date": "2024-12-24",
+  "volatility": {
+    "predicted_rf": 0.0193716513330165,
+    "predicted_xgb": 0.018807033180363,
+    "model_agreement": 0.9708533803883214
+  },
+  "risk": {
+    "class": 1,
+    "name": [
+      "Medium",
+      "Risk"
+    ],
+    "confidence": 0.95
+  },
+  "timestamp": "2026-01-28T17:31:00.616285"
+}
