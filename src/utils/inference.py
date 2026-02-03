@@ -306,7 +306,7 @@ class InferencePipeline:
         return "\n".join(report)
     
     def save_predictions(self, predictions: Dict, 
-                        output_dir: str = 'data/analysis') -> Path:
+                        output_dir: str = 'data/results/predictions') -> Path:
         """
         Save predictions to disk.
         

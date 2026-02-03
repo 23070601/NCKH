@@ -67,11 +67,20 @@ def download_stock_data(ticker: str, start_date: str, end_date: str,
                 type='stock'
             )
             return df
-        except ImportError:
-            print(f"vnstock not installed. Using manual data for {ticker}")
+        except Exception:
+            print(f"vnstock unavailable. Using manual data for {ticker}")
             return generate_sample_data(ticker, start_date, end_date)
     else:
         return generate_sample_data(ticker, start_date, end_date)
+
+
+def download_index_data(start_date: str, end_date: str, source: str = 'vnstock', 
+                        symbol: str = 'VNINDEX') -> pd.DataFrame:
+    """
+    Download VNIndex data (fallback to synthetic if not available).
+    Returns DataFrame with columns: time, open, high, low, close, volume
+    """
+    return download_stock_data(symbol, start_date, end_date, source)
 
 
 def generate_sample_data(ticker: str, start_date: str, end_date: str) -> pd.DataFrame:

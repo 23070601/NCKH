@@ -13,6 +13,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from data_utils import (
     download_stock_data,
+    download_index_data,
     get_trading_days,
     create_adjacency_matrix,
     save_adjacency_matrix,
@@ -53,6 +54,7 @@ class VNStocksDataset:
     
     def collect_price_data(self, source: str = 'manual'):
         """Collect historical price data for all stocks"""
+        self.source = source
         print(f"\n[1/3] Collecting price data...")
         
         for i, ticker in enumerate(self.tickers, 1):
@@ -110,14 +112,33 @@ class VNStocksDataset:
             
             stock_df['Symbol'] = ticker
             stock_df = stock_df.reset_index()
-            stock_df = stock_df.rename(columns={'index': 'Date', 'close': 'Close'})
-            data_list.append(stock_df[['Symbol', 'Date', 'Close']])
+            stock_df = stock_df.rename(columns={
+                'index': 'Date',
+                'open': 'Open',
+                'high': 'High',
+                'low': 'Low',
+                'close': 'Close',
+                'volume': 'Volume'
+            })
+            data_list.append(stock_df[['Symbol', 'Date', 'Open', 'High', 'Low', 'Close', 'Volume']])
         
         values_df = pd.concat(data_list, ignore_index=True)
         values_df = values_df.set_index(['Symbol', 'Date'])
         
         # Add features per stock
         values_df = values_df.groupby(level='Symbol', group_keys=False).apply(self._add_features)
+
+        # Add VNIndex features (broadcast to all symbols)
+        vnindex = download_index_data(self.start_date, self.end_date, getattr(self, 'source', 'manual'))
+        vnindex['time'] = pd.to_datetime(vnindex['time'])
+        vnindex = vnindex.set_index('time').reindex(all_dates).ffill().bfill()
+        vnindex_df = pd.DataFrame({
+            'Date': vnindex.index,
+            'VNIndex_Close': vnindex['close'].values,
+        })
+        vnindex_df['VNIndex_Return'] = np.log(vnindex_df['VNIndex_Close'] / vnindex_df['VNIndex_Close'].shift(1))
+        vnindex_df = vnindex_df.set_index('Date').ffill().bfill()
+        values_df = values_df.join(vnindex_df, on='Date')
         
         return values_df
     
@@ -151,6 +172,21 @@ class VNStocksDataset:
         ema12 = group['Close'].ewm(span=12).mean()
         ema26 = group['Close'].ewm(span=26).mean()
         group['MACD'] = ema12 - ema26
+
+        # Moving Averages
+        group['MA_5'] = group['Close'].rolling(window=5).mean()
+        group['MA_10'] = group['Close'].rolling(window=10).mean()
+        group['MA_20'] = group['Close'].rolling(window=20).mean()
+
+        # Bollinger Bands (20, 2)
+        bb_mid = group['Close'].rolling(window=20).mean()
+        bb_std = group['Close'].rolling(window=20).std()
+        group['BB_MID'] = bb_mid
+        group['BB_UPPER'] = bb_mid + 2 * bb_std
+        group['BB_LOWER'] = bb_mid - 2 * bb_std
+
+        # Volatility feature (20-day rolling std of returns)
+        group['VOL_20'] = group['DailyLogReturn'].rolling(window=20).std()
         
         return group.ffill().bfill()
     

@@ -1,22 +1,90 @@
-# Vietnamese FDI Stock Volatility Prediction
+# 🎯 Predicting the Volatility and Risk Level of Stock Prices of FDI Enterprises Listed in Vietnam
 
-## Quick Start
+> **Objective**: Predict the average volatility and risk classification over the next 5 days for 98 FDI stocks listed on the Vietnamese stock market
 
-**Fastest way - use cached pipeline:**
+---
 
-```bash
-./run_pipeline.sh                   # ~8s (cached) or ~150s (first run)
-./run_pipeline.sh --force           # Force recomputation of all steps
-```
-
-**Or run individual steps:**
+## 🚀 CHẠY DỰ ÁN (1 LỆNH)
 
 ```bash
-python train_models.py              # Train models with lag features
-python create_base_predictions.py   # Create base predictions from models
-python generate_predictions.py      # Generate improved predictions
-python evaluate_models.py           # Evaluate model performance
+./run_pipeline.sh           # Cached (~8s) hoặc lần đầu (~400s)
+./run_pipeline.sh --force   # Force chạy lại toàn bộ
 ```
+
+**Pipeline gồm 8 bước**:
+1. Thu thập OHLCV + VNIndex
+2. Export features ra CSV
+3. Build PyTorch tensors
+4. Train models (RandomForest, GradientBoosting, Ridge)
+5. Generate base predictions
+6. Generate improved predictions (với lag features)
+7. Evaluate models
+8. Export tables
+
+---
+
+## 📂 CẤU TRÚC DỰ ÁN
+
+```
+NCKH/
+├── pipeline/             → 8 bước pipeline (CORE)
+├── data/
+│   ├── raw/             → values.csv (OHLCV), adj.npy
+│   ├── features/        → all_features_raw.csv, all_features_processed.csv
+│   ├── processed/       → timestep_*.pt (723 timesteps)
+│   └── results/         → models, predictions, evaluation
+├── src/
+│   ├── datasets/        → VNStocksDataset
+│   ├── models/          → random_forest.py
+│   ├── utils/           → backtest, inference
+│   ├── VNStocks.py      → Feature engineering
+│   └── data_utils.py    → Data utilities
+├── PROJECT_MAP.md       → 🗺️ BẢN ĐỒ CHI TIẾT (XEM ĐÂY)
+└── run_pipeline.sh      → Master script
+```
+
+👉 **Xem [PROJECT_MAP.md](PROJECT_MAP.md) để hiểu CHI TIẾT từng file làm gì**
+
+## 📊 DỮ LIỆU (INPUT/OUTPUT)
+
+### INPUT (X) - 24 features
+**File CSV**: [data/features/all_features_raw.csv](data/features/all_features_raw.csv)
+
+**Features gồm**:
+- OHLCV: Open, High, Low, Close, Volume
+- Technical: RSI, MACD, MA_5, MA_10, MA_20, BB_UPPER/MID/LOWER, VOL_20
+- Returns: DailyLogReturn, ALR1W, ALR2W, ALR1M, ALR2M
+- Market: VNIndex_Close, VNIndex_Return
+
+👉 Chi tiết: [DATA_INPUT.md](DATA_INPUT.md)
+
+### OUTPUT (y) - Volatility
+**File CSV**: [data/results/exports/all_volatility_labels.csv](data/results/exports/all_volatility_labels.csv)
+
+**Định nghĩa**: Volatility = độ lệch chuẩn của returns trong 20 ngày
+
+**Target**: Dự báo volatility trung bình **5 ngày tới**
+
+👉 Chi tiết: [DATA_OUTPUT.md](DATA_OUTPUT.md)
+
+## Report guide (mở file nào khi thầy hỏi)
+
+### Câu hỏi 1: “Input là gì? data gốc ở đâu?”
+- Mở: [DATA_INPUT.md](DATA_INPUT.md)
+- File dữ liệu: [data/features/all_features_raw.csv](data/features/all_features_raw.csv)
+
+### Câu hỏi 2: “Output là gì? label tính thế nào?”
+- Mở: [DATA_OUTPUT.md](DATA_OUTPUT.md)
+- File output: [data/results/exports/all_volatility_labels.csv](data/results/exports/all_volatility_labels.csv)
+
+### Câu hỏi 3: “Feature tính ở đâu?”
+- Mở code: [src/VNStocks.py](src/VNStocks.py)
+
+### Câu hỏi 4: “Dataset .pt tạo ở đâu?”
+- Mở code: [src/datasets/VNStocksDataset.py](src/datasets/VNStocksDataset.py)
+
+### Câu hỏi 5: “Model train ở đâu?”
+- Mở script: [pipeline/04_train_models.py](pipeline/04_train_models.py)
 
 ## Features
 
@@ -31,11 +99,16 @@ python evaluate_models.py           # Evaluate model performance
 ```
 NCKH/
 ├── run_pipeline.sh                 # Master pipeline runner (recommended)
-├── train_models.py                 # Model training (with caching)
-├── create_base_predictions.py      # Base prediction generation (with caching)
-├── generate_predictions.py         # Improved prediction generation (with caching)
-├── evaluate_models.py              # Model evaluation (with caching)
-├── download_data.py                # Data download utility
+├── pipeline/                        # Refactored pipeline steps
+│   ├── 01_collect_values.py
+│   ├── 02b_export_full_features.py
+│   ├── 03_build_tensors.py
+│   ├── 04_train_models.py
+│   ├── 05_base_predictions.py
+│   ├── 06_generate_predictions.py
+│   ├── 07_evaluate.py
+│   ├── 08_export_tables.py
+│   └── 09_risk_portfolio.py
 ├── requirements.txt
 ├── README.md
 ├── FINAL_REPORT.md                 # Comprehensive documentation
@@ -43,23 +116,17 @@ NCKH/
 ├── data/
 │   ├── raw/                        # Raw stock data
 │   ├── processed/                  # PyTorch datasets (747 timestep files)
-│   ├── features/                   # Feature matrices
-│   └── analysis/
-│       ├── quick_improvement/      # Trained models (latest only)
-│       ├── backtest_improved_lag/  # Backtest results
-│       └── evaluation_improved_lag/# Evaluation metrics & visualizations
-│
-├── notebooks/
-│   ├── 0_data_collection.ipynb
-│   ├── 1_data_preparation.ipynb
-│   ├── 2_data_preparation.ipynb
-│   └── 3_model_comparison.ipynb
+│   ├── features/                   # Full feature tables (all_features_*.csv)
+│   └── results/
+│       ├── models/                 # Trained models + selectors
+│       ├── predictions/            # predictions_*.csv
+│       ├── evaluation/             # metrics + plots
+│       ├── backtest/               # backtest summaries
+│       └── exports/                # CSV exports for input/output
 │
 └── src/
     ├── VNStocks.py
     ├── data_utils.py
-    ├── macro_data.py
-    ├── risk_metrics.py
     ├── datasets/
     ├── models/
     └── utils/
@@ -68,76 +135,24 @@ NCKH/
 ## Core Scripts
 
 ### `run_pipeline.sh` (Recommended)
-Master pipeline runner that orchestrates all steps with smart caching.
+Runs the full pipeline with caching.
 
 **Usage**:
 ```bash
-./run_pipeline.sh                   # Uses cache (fast - ~8s)
-./run_pipeline.sh --force           # Full recomputation (~150s)
+./run_pipeline.sh
+./run_pipeline.sh --force
 ```
 
-**Caching Logic**:
-- Detects existing models, predictions, and evaluations
-- Only recomputes if `--force` flag is used or files are missing
-- Shows which files are cached and how to force recomputation
-
-### `train_models.py`
-Trains regression and classification models with lag features.
-
-**Usage**:
-```bash
-python train_models.py              # Uses cache if models exist
-python train_models.py --force      # Force retraining
-```
-
-**Features**: Temporal lags (t-1, t-2, t-3) + rolling statistics  
-**Models**: Ridge, Random Forest, Gradient Boosting, Ensemble  
-**Classification**: 3-class risk (Low/Medium/High) with SMOTE balancing  
-
-**Results**:
-- Regression R²: 0.2416 (vs -0.015 baseline, +2451%)
-- Classification Accuracy: 79.56% (vs 33.3% baseline, +46.3%)
-
-### `create_base_predictions.py`
-Generates base predictions from trained models on test data.
-
-**Usage**:
-```bash
-python create_base_predictions.py              # Uses cache if exists
-python create_base_predictions.py --force      # Force regeneration
-```
-
-**Output**: predictions_*.csv
-
-### `generate_predictions.py`
-Applies lag-based improvement to base predictions.
-
-**Usage**:
-```bash
-python generate_predictions.py              # Uses cache if exists
-python generate_predictions.py --force      # Force regeneration
-```
-
-**Features**: Lag-aware feature extraction + ensemble regressor  
-**Output**: predictions_improved_lag_*.csv
-
-### `evaluate_models.py`
-Comprehensive evaluation with metrics and visualizations.
-
-**Usage**:
-```bash
-python evaluate_models.py              # Uses cache if exists
-python evaluate_models.py --force      # Force re-evaluation
-```
-
-**Output**: 
-- metrics.json (R², MAE, accuracy, confusion matrix)
-- confusion_matrix.png
-- calibration.png
-- classification_report.txt
-
-### `download_data.py`
-Downloads stock data from Yahoo Finance.
+### Pipeline steps
+1. **pipeline/01_collect_values.py** – Collect OHLCV + VNIndex → values.csv + adj.npy
+2. **pipeline/02b_export_full_features.py** – Export all features → all_features_raw/processed.csv
+3. **pipeline/03_build_tensors.py** – Build timestep_*.pt for training
+4. **pipeline/04_train_models.py** – Train RF/GB/Ridge/XGBoost + LSTM + classifier
+5. **pipeline/05_base_predictions.py** – Base predictions
+6. **pipeline/06_generate_predictions.py** – Improved predictions (lag features)
+7. **pipeline/07_evaluate.py** – Metrics + plots
+8. **pipeline/08_export_tables.py** – Export CSV tables
+9. **pipeline/09_risk_portfolio.py** – VaR/CVaR + CVaR portfolio optimization
 
 ## Performance & Speed
 
@@ -221,7 +236,7 @@ See requirements.txt for full list.
 2. Run: `python train_models.py`
 3. Run: `python generate_predictions.py`
 4. Run: `python evaluate_models.py`
-5. Review results in data/analysis/
+5. Review results in data/results/
 
 ## Output Files
 
